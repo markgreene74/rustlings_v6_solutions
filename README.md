@@ -33,6 +33,12 @@ cargo install rustlings
 rustlings init
 ```
 
+**NOTE**: as `rustlings` in this case is inside an outer repo, remove the `.git` directory that was automatically created.
+
+```shell
+rm -rf rustlings/.git
+```
+
 ```shell
 cd rustlings/
 rustlings
