@@ -9,10 +9,13 @@ mod tests {
     #[test]
     fn move_semantics4() {
         let mut x = Vec::new();
+        // first declare+push on y
         let y = &mut x;
-        let z = &mut x;
         y.push(42);
+        // and then z
+        let z = &mut x;
         z.push(13);
+
         assert_eq!(x, [42, 13]);
     }
 }
