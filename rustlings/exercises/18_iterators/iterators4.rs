@@ -10,6 +10,15 @@ fn factorial(num: u64) -> u64 {
     // - additional variables
     // For an extra challenge, don't use:
     // - recursion
+    let mut range_from_num = 1..=num;
+    let mut result: u64 = 1;
+    loop {
+        match range_from_num.next() {
+            Some(x) => result = result * x,
+            None => break,
+        }
+    }
+    result
 }
 
 fn main() {
