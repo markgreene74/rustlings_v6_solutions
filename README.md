@@ -1,5 +1,7 @@
 # rustlings_v6_solutions
 
+![alt text](2024-10-06_15-19-58.png)
+
 My solutions for Rustlings v6.
 
 I started with Rustlings version `5.x`, which used a different way to check the exercise's progression. The exercises also seems to have gone through some important changes, so I decided to keep the old solutions in a separate repo (https://github.com/markgreene74/rustlings_v5_solutions) and work the entire set again from scratch.
