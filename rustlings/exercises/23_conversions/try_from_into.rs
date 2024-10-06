@@ -28,14 +28,42 @@ enum IntoColorError {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
 
-    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {}
+    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        match tuple {
+            // r, g, b are all in range
+            (0..=255, 0..=255, 0..=255) => {
+                let (r, g, b) = tuple;
+                return Ok(Color {
+                    red: r as u8,
+                    green: g as u8,
+                    blue: b as u8,
+                });
+            }
+            // at least one of r, g, b is out of range
+            (_, _, _) => return Err(IntoColorError::IntConversion),
+        };
+    }
 }
 
 // TODO: Array implementation.
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
 
-    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {}
+    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        match arr {
+            // r, g, b are all in range
+            [0..=255, 0..=255, 0..=255] => {
+                let (r, g, b) = (arr[0], arr[1], arr[2]);
+                return Ok(Color {
+                    red: r as u8,
+                    green: g as u8,
+                    blue: b as u8,
+                });
+            }
+            // at least one of r, g, b is out of range
+            [_, _, _] => return Err(IntoColorError::IntConversion),
+        };
+    }
 }
 
 // TODO: Slice implementation.
@@ -43,7 +71,27 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
 
-    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {}
+    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        // first thing first, make sure the slice is of the right size
+        if slice.len() != 3 {
+            return Err(IntoColorError::BadLen);
+        };
+
+        let mut arr: [i16; 3] = [0; 3];
+        // for each element, check if it is in range and add to the array
+        for item in slice.iter().enumerate() {
+            let (i, color): (usize, &i16) = item;
+            match color {
+                0..=255 => arr[i] = *color,
+                _ => return Err(IntoColorError::IntConversion),
+            }
+        }
+        return Ok(Color {
+            red: arr[0] as u8,
+            green: arr[1] as u8,
+            blue: arr[2] as u8,
+        });
+    }
 }
 
 fn main() {

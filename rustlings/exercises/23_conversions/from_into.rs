@@ -34,7 +34,44 @@ impl Default for Person {
 // 5. Parse the second element from the split operation into a `u8` as the age.
 // 6. If parsing the age fails, return the default of `Person`.
 impl From<&str> for Person {
-    fn from(s: &str) -> Self {}
+    fn from(s: &str) -> Self {
+        if s.contains(",") {
+            // dbg!(s);
+            let name_age = match s.split(",").collect::<Vec<&str>>() {
+                name_age if name_age.len() == 2 => {
+                    // split name_age into elements, take the first as
+                    // name and the second as age
+                    let (name, age) = (&name_age[0], &name_age[1]);
+                    // use the helper function (name_age_assigner) to
+                    // validate name, age and change the age type (&str -> u8)
+                    return name_age_assigner(name.trim(), age.trim());
+                }
+                _ => return Person::default(),
+            };
+        } else {
+            Person::default()
+        }
+    }
+}
+
+// small helper function to take some of the logic
+// around name and age conversion out of the `from` impl
+fn name_age_assigner(name: &str, age: &str) -> Person {
+    match (name, age) {
+        (name, age)
+            if name.chars().all(|x| x.is_alphabetic())
+                && name.len() > 0
+                && age.chars().all(|x| x.is_numeric())
+                && age.len() > 0 =>
+        {
+            ()
+        }
+        (_, _) => return Person::default(),
+    };
+    Person {
+        name: name.to_string(),
+        age: age.parse::<u8>().unwrap(),
+    }
 }
 
 fn main() {
